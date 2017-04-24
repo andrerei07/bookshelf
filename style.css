@@ -1,0 +1,128 @@
+body{
+	background-color:white;
+}
+	/* titulo da pagina a azul*/
+h1#maintitle{
+	color: #b48608;
+	font-family: 'Droid serif',serif;
+	font-size: 36px;
+	font-weight: 400;
+	font-style: italic; 
+	line-height: 44px; 
+	margin: 0 0 12px; 
+	text-align: center;
+	background-color:black; 
+	/*color:blue;
+	text-align: center;
+	font-family:fantasy; */
+}
+
+/* titulo dos kivreis a preto centrados */
+h1.titulo{
+	color:black;
+	text-align: center;
+	font-style: italic;
+}
+
+/* divisao da tela em 3 coluna 
+div{
+	-webkit-columns: 3;
+}  */
+
+/* aiinhamento das imagens*/
+img.imagem{
+	align-items:middle;
+	/*width:100%;*/
+	padding:5%
+}
+/* resumo justificado e fundo verde */
+p.resumo{
+	background-color:;
+	text-align:justify;
+	padding:5%;
+	word-spacing:5px
+}
+/* links alinhados ao centro */
+a.link{
+	text-align: center;
+	color:red;
+	/* display:block; para os links nao ficarem na div toda alinha a div ao centro*/
+	margin-bottom: 10px;
+}
+
+div.divlink{
+	text-align: center; 
+
+}
+/* alterar a cor quando passamos por cima do link*/
+a.link:hover{
+	align-items:center;
+	color:green;
+}
+
+a.corestrela:hover{
+	color:#e8d727;
+} 
+
+a.estrelapreenchida{
+	color:#e8d727;
+}
+/* para sistema de rating */
+span.estrelapreenchida{
+	color:#e8d727;
+}
+
+div.alinhar{
+	text-align:center; 
+	margin-bottom: 10px; 
+}
+ /* tornar a divisao invisivel
+*/
+/* .bookcontainer > div{
+	visibility: hidden;
+}
+ /*definir a visibilidae inicial */
+.bookcontainer > div.visible{
+	visibility:initial;
+}
+
+
+
+/* dimensao da estrela*/
+img#estrela{
+	width: 30;
+}
+/**/
+.column33{
+	width:30%;
+	float:left;
+	padding:20px;
+}
+/* responsive design*/
+@media(max-device-width:767px){
+	.column33{
+		width:100%;
+
+	}
+}
+@media(max-width:767px){
+	.column33{
+		width:100%;
+
+	}
+}
+div.container-fluid{
+	color: #b48608;
+	font-family: 'Droid serif',serif;
+	font-style: italic; 
+	text-align: center;
+	background-color:black;
+}
+
+p.palinhar{
+	text-align: center;
+}
+
+div.col-md-4:hover{
+	background-color:#d5dbe5;
+}
