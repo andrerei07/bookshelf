@@ -326,6 +326,25 @@
 			}	
 			bookshelf.init();
 		}
+
+	}
+
+	function SearchBar(bookshelf){
+		
+		this.bookshelf= bookshelf;
+
+		this.search = function(){
+			
+			var botaosearch = $("#procura");
+			var bookshelf = this.bookshelf;	
+			
+			botaosearch.off("submit");
+			botaosearch.submit(function(event){
+				var parameter = $("#searchParameter").val();
+				bookshelf.loadBook(parameter);
+				event.preventDefault();
+			});
+		}
 	}
 
 	var bookshelf1 = new BookShelf();
@@ -338,17 +357,12 @@
 	// bookshelf1.loadBook();
 	bookshelf1.loadBook();
 
+	var searchBar1= new SearchBar(bookshelf1);
 
+	searchBar1.search();
 
 	
-	var botaosearch = $("#procura");
 
-	botaosearch.off("submit");
-	botaosearch.submit(function(event){
-		var parameter = $("#searchParameter").val();
-		bookshelf1.loadBook(parameter);
-		event.preventDefault();
-	});
 	
 
 
