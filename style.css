@@ -48,6 +48,10 @@ a.link{
 	color:red;
 	/* display:block; para os links nao ficarem na div toda alinha a div ao centro*/
 	margin-bottom: 10px;
+	cursor:pointer;
+}
+a{
+	cursor:pointer;
 }
 
 div.divlink{
