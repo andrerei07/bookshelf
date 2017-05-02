@@ -12,12 +12,14 @@
 		this.bookshelf;
 
 
-
+		// adicionar um rating num livro
 		this.addRate= function(varrate){
 
 
 			this.ratings.push(varrate)
 		}
+
+		// calcular a média de rating de um livro utilizando os rates existentes
 		this.meanRate= function(){
 
 			var total=0;
@@ -33,8 +35,11 @@
 
 			return total;
 		}
+
+		}
 		this.render= function(id){
 
+			//  
 			var idTitle = "#"+id+" .titulo";
 			$(idTitle).html(this.title);
 
@@ -92,7 +97,9 @@
 				$("#"+id+" .rate5").addClass("estrelapreenchida");
 			}
 
+			// adicionar os rates dados nos respetivos livros
 			data={book:this,id:id};
+
 
 			$("#"+id+" .rate1").off("click");
 			$("#"+id+" .rate1").click(data,function(event){
@@ -156,6 +163,8 @@
 
 			var data={bookshelf:this.bookshelf,id:id};
 
+
+			// trocar para o proximo livro
 			var botaonext = $("#"+id+" .next");
 
 			botaonext.off("click");
@@ -163,6 +172,7 @@
 				event.data.bookshelf.nextBook(event.data.id);
 			});	
 
+			// trocar para o ultimo livro visto
 			var data={bookshelf:this.bookshelf,id:id};
 			var botaoprevious = $("#"+id+" .previous");
 
@@ -170,20 +180,10 @@
 			botaoprevious.click(data,function(event){
 				event.data.bookshelf.previousBook(event.data.id);
 			});
-
-			var data={bookshelf:this.bookshelf,id:id};
-			var botaoprevious = $("#"+id+" .previous");
-
-			botaoprevious.off("click");
-			botaoprevious.click(data,function(event){
-				event.data.bookshelf.previousBook(event.data.id);
-			});
-
-
 		}
 	}	
 
-
+		// estrutar de dados em queue first in first out
 
 	function Queue (){
 
@@ -208,6 +208,7 @@
 		}
 	}
 
+	// estrutura de dados em stack last in first out
 	function Stack(){
 
 
@@ -230,15 +231,24 @@
 
 		this.shelf = new Queue();
 		this.shelf1 = new Stack();
-		
+		this.shelfFavorites = new Queue();
+		this.shelfFavorites1 = new Stack();
 
-
-
+		// adicionar um livro na bookshelf
 		this.addBook = function(book){
 
 			book.bookshelf = this;
 			this.shelf.enqueue(book);
+		}		
+
+		this.addToFavorites= function(book){
+
+			book.bookshelf = this;
+			this.shelfFavorites.enqueue(book);		
+			
+			
 		}
+		// inicializar os primeiros 3 livros 
 		this.init=function(){
 
 			var elemento1= this.shelf.dequeue();
@@ -254,32 +264,56 @@
 
 		} 
 
+		this.initFavorites=function(){
+
+			var favorito1 = this.shelfFavorites.dequeue();
+			var favorito2 = this.shelfFavorites.dequeue();
+			var favorito3 = this.shelfFavorites.dequeue();
+
+			favorito1.render("book1");
+			this.shelfFavorites1.push(favorito1);
+			favorito2.render("book2");
+			this.shelfFavorites1.push(favorito2);
+			favorito3.render("book3");
+			this.shelfFavorites1.push(favorito3);
+
+ 
+
+
+		}
+		// inicializar o proximo livro
 		this.nextBook = function(id){
 
 			var elemento = this.shelf.dequeue();
 			this.shelf1.push(elemento);
 			elemento.render(id);
 		}
+		// inicializar o ultimo livro visto
 		this.previousBook= function(id){
 
 			var lastElement = this.shelf1.pop();
 			lastElement.render(id);
 		}
+
+
+		// colocar as shelf vazias novamente
 		this.reset= function(){
 		
 			this.shelf = new Queue();
 			this.shelf1 = new Stack();
 
 		}
+
+		// procura atraves da API de livros quer pelo metodo de pesquisa quer por bookslhel pre definida
 		this.loadBook = function(search){
 
 			this.reset();
 
 			var bookshelf = this;
 			var url=0
-			if(search){
+			if(search){ // books resultantes da pesquisa
 				url= "https://www.googleapis.com/books/v1/volumes?q="+search;	
-			}else{
+			}else{ // books resultantes da bookshelf pre definida
 				url="https://www.googleapis.com/books/v1/users/114855688559085138634/bookshelves/1001/volumes";
 			}
 
@@ -291,8 +325,8 @@
 			.fail(function(data){
 				console.log("ERROR; "+data);
 			});
-			
 		}
+		// colocar a informação referente a cada carateristica do livro obtido 
 		this.parseBook = function(data,search){
 
 			var bookshelf = this;		
@@ -314,9 +348,9 @@
 					if(data.items[i].volumeInfo.imageLinks.thumbnail && data.items[i].volumeInfo.title && data.items[i].volumeInfo.description && data.items[i].volumeInfo.industryIdentifiers && data.items[i].selfLink){
 						var imagemNova = data.items[i].volumeInfo.imageLinks.thumbnail;
 						var tituloNovo = data.items[i].volumeInfo.title;
-						var sinopseNova = data.items[i].description;
+						var sinopseNova = data.items[i].volumeInfo.description;
 						var isbnNovo = data.items[i].volumeInfo.industryIdentifiers[0].identifier;
-						var linkNovo = data.items[i].saleInfo.selfLink;
+						var linkNovo = data.items[i].selfLink;
 						
 						
 						var newBook = new Book(tituloNovo,sinopseNova,isbnNovo,imagemNova,linkNovo);
@@ -326,13 +360,13 @@
 			}	
 			bookshelf.init();
 		}
-
 	}
 
 	function SearchBar(bookshelf){
 		
 		this.bookshelf= bookshelf;
 
+		//  pesquisa através da barra de pesquisa
 		this.search = function(){
 			
 			var botaosearch = $("#procura");
@@ -345,26 +379,60 @@
 				event.preventDefault();
 			});
 		}
+
+		//  faz refresh na pagina
+		this.home = function(){
+
+			var botaoHome = $("#homepage")
+
+			botaoHome.off("click");
+			botaoHome.click(
+				botaoHome.attr("href","http://www.google.pt")			
+			)
+		}
+
+		this.favorites = function(){
+
+			var botaoFavorito = $("#favoritoBar")
+
+
+			botaoFavorito.off("click");
+			botaoFavorito.click(function(event){
+				event.bookShelf.initFavorites();
+
+			}
+							
+			)
+
+		}
+
 	}
 
+
+	// instanciar as variaveis 
+
 	var bookshelf1 = new BookShelf();
-	
-
-	/* bookshelf1.loadBook("Harry+Potter");
-	bookshelf1.loadBook("game+of+thrones");
-	bookshelf1.loadBook("hunger+games") */ 
-
-	// bookshelf1.loadBook();
 	bookshelf1.loadBook();
+	var shelfFavorites = new BookShelf();
 
 	var searchBar1= new SearchBar(bookshelf1);
-
 	searchBar1.search();
+	searchBar1.home();
 
 	
 
-	
+	/*	this.favoriteBook=function(){
 
+			book=this;
+
+			var data={bookshelf:this.bookshelf};
+			var botaofavorite = $(" .favorite");
+			
+			botaofavorite.off("click");
+			botaofavorite.click(data,function(event){
+				event.data.bookshelf.addToFavorites(book);
+			});
+	*/
 
 
 
